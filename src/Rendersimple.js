@@ -17,7 +17,8 @@ function Rendersimple() {
     }, [])
 
     return (
-        <>
+        <div>
+            <p>ilife</p>
             {user.map((row, index) => (
                 <>
                     <li>{row.name}</li>
@@ -26,7 +27,7 @@ function Rendersimple() {
                     <li>----</li>
                 </>
             ))}
-        </>
+        </div>
 
 
     )
