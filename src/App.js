@@ -35,7 +35,7 @@ function App() {
 
 
 			<input type="text" value={value} onChange={(e) => setValue(e.target.value)} />
-			<button onClick={() => submitData()}>Submit1</button>
+			<button onClick={() => submitData()}>Submitgh-pages</button>
 			<input type="text" value={data} />
 		</div>
 	);
