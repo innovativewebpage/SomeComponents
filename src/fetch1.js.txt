@@ -1,0 +1,144 @@
+import React,{useState} from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { Form,Modal,Table  } from "react-bootstrap";
+import Button from 'react-bootstrap/Button';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'
+import moment from 'moment';
+import { updateEmployee,deleteEmployee} from '../actions';
+
+const EmployeeFetch = () => {
+
+const employee_data = useSelector((state)=>state.employee);
+//console.log('employee_data==',employee_data);
+const dispatch = useDispatch();
+
+const [employeeDetails, setEmployeeDetails] = useState(null);
+const [employeeDetailsModal, setEmployeeDetailsModal]=useState(false);
+
+
+
+const editEmployee = (employee) => {
+setEmployeeDetails(employee);
+setEmployeeDetailsModal(true);
+};
+
+  const deleteEmployeeData = (employee) => {
+dispatch(deleteEmployee(employee._id));
+};
+
+const handleCloseemployeeDetailsModal = () => {
+setEmployeeDetailsModal(false);
+};
+
+
+const submitEmployeeEditForm = (e) => {
+e.preventDefault();
+ dispatch(updateEmployee(employeeDetails._id, employeeDetails));
+setEmployeeDetailsModal(false);
+
+
+ }
+
+
+
+  return (
+    <div>
+<h3>Employee Fetch</h3>
+<pre>{/*JSON.stringify(employee_data, null, 2)*/}</pre>
+<table striped style={{ fontSize: 12 }} responsive="sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Employee Name</th>
+            <th>Employee Email</th>
+<th>Employee Mobile</th>
+<th>Employee Data</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {employee_data.length > 0
+            ? employee_data.map((employee,index) => (
+                <tr key={index}>
+                  <td>{index+1}</td>
+                  <td>{employee.empName}</td>
+ <td>{employee.empEmail}</td>
+ <td>{employee.empMobile}</td>
+ <td>{moment(employee.empDob).format('DD-MM-YYYY')}</td>
+<td><Button
+ onClick={() => editEmployee(employee)}
+ variant="primary">Edit</Button></td>
+  <td><Button
+  onClick={() => deleteEmployeeData(employee)}
+  variant="danger">Delete</Button></td>
+ 
+
+
+                </tr>
+              ))
+            : 'no employee details'}
+        </tbody>
+      </table>
+
+
+<Modal show={employeeDetailsModal}
+onHide={handleCloseemployeeDetailsModal}
+onSubmit={submitEmployeeEditForm}
+>
+ 
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Course </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+
+<Form>
+<Form.Group className="mb-3" >
+<Form.Label>Employee Name</Form.Label>
+<Form.Control type="text" value={employeeDetails ? employeeDetails.empName:''}
+onChange={(e) => setEmployeeDetails({ ...employeeDetails, empName: e.target.value })}  
+/>
+</Form.Group>
+
+<Form.Group className="mb-3" >
+<Form.Label>Employee Email</Form.Label>
+<Form.Control type="text" value={employeeDetails ? employeeDetails.empEmail:''}
+onChange={(e) => setEmployeeDetails({ ...employeeDetails, empEmail: e.target.value })}  
+/>
+</Form.Group>
+
+<Form.Group className="mb-3" >
+<Form.Label>Employee Mobile</Form.Label>
+<Form.Control type="text" value={employeeDetails ? employeeDetails.empMobile:''}
+onChange={(e) => setEmployeeDetails({ ...employeeDetails, empMobile: e.target.value })}  
+/>
+</Form.Group>
+ 
+
+ 
+  <DatePicker
+onChange={(e) => setEmployeeDetails({ ...employeeDetails, empDob: e })}  
+value={employeeDetails ? moment(employeeDetails.empDob).format('DD-MM-YYYY'):''}
+/>
+
+
+
+ 
+
+ 
+  <Button variant="primary" type="submit">
+    Submit
+  </Button>
+</Form>
+
+</Modal.Body>
+      </Modal>
+
+
+
+
+    </div>
+  );
+};
+
+export default EmployeeFetch;
